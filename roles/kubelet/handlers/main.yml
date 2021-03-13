@@ -1,0 +1,5 @@
+---
+- name: kubelet status
+  service:
+    name: kubelet
+    state: started

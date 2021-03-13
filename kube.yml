@@ -1,0 +1,16 @@
+---
+- hosts: managers
+  gather_facts: true
+  roles:
+    - kubelet
+    - kubeadm
+    - calico
+    - kubectl
+    - helm
+  environment: "{{env}}"
+- hosts: workers
+  gather_facts: true
+  roles:
+    - kubelet
+  environment: "{{env}}"
+

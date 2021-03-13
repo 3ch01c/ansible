@@ -1,0 +1,10 @@
+---
+- name: Install Tigera operator (calico)
+  command: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+  tags:
+    - calico
+
+- name: Install calico CRD
+  command: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+  tags:
+    - calico
