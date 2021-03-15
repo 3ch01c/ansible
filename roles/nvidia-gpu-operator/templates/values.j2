@@ -1,0 +1,38 @@
+---
+nfd:
+  enabled: true # false if NFD is already enabled
+driver:
+  env:
+    - name: http_proxy
+      value: {{ env.http_proxy }}
+    - name: https_proxy
+      value: {{ env.https_proxy }}
+toolkit:
+  env:
+    - name: http_proxy
+      value: {{ env.http_proxy }}
+    - name: https_proxy
+      value: {{ env.https_proxy }}
+devicePlugin:
+  env:
+    - name: http_proxy
+      value: {{ env.http_proxy }}
+    - name: https_proxy
+      value: {{ env.https_proxy }}
+dcgmExporter:
+  args:
+    - "-f"
+    - "/etc/dcgm-exporter/default-counters.csv"
+  env:
+    - name: http_proxy
+      value: {{ env.http_proxy }}
+    - name: https_proxy
+      value: {{ env.https_proxy }}
+    - name: NVIDIA_VISIBILE_DEVICES
+      value: "1"
+gfd:
+  env:
+    - name: http_proxy
+      value: {{ env.http_proxy }}
+    - name: https_proxy
+      value: {{ env.https_proxy }}

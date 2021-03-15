@@ -1,0 +1,27 @@
+---
+- name: Run preinstall tasks
+  include_tasks: preinstall.yml
+  tags:
+    - nvidia-gpu-operator
+
+- name: Add Helm repository
+  command: "helm repo add nvidia https://nvidia.github.io/gpu-operator"
+  tags:
+    - nvidia-gpu-operator
+
+- name: Update Helm repositories
+  command: "helm repo update"
+  tags:
+    - nvidia-gpu-operator
+
+- name: Add custom configuration
+  template:
+    src: values.j2
+    dest: nvidia-gpu-operator-values.yml
+  tags:
+    - nvidia-gpu-operator
+
+- name: Install Helm chart
+  command: "helm upgrade --install -f nvidia-gpu-operator-values.yml gpu-operator nvidia/gpu-operator"
+  tags:
+    - nvidia-gpu-operator

@@ -7,10 +7,12 @@
     - calico
     - kubectl
     - helm
+    - nvidia-gpu-operator
   environment: "{{env}}"
 - hosts: workers
   gather_facts: true
   roles:
     - kubelet
+    - nvidia-gpu-operator
   environment: "{{env}}"
 

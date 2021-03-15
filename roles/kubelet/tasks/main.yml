@@ -23,6 +23,7 @@
             name: "{{ packages }}"
             state: present
             update_cache: yes
+            force: yes
           vars:
             packages:
               - kubelet

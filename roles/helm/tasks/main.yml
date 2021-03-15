@@ -3,11 +3,11 @@
     - name: Get Helm installer
       get_url:
         url: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-        dest: get_helm.sh
+        dest: ./get_helm.sh
         mode: 0755
   
     - name: Install Helm
-      shell: get_helm.sh
+      shell: ./get_helm.sh
   tags:
     - helm
 

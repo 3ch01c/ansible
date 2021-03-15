@@ -1,0 +1,11 @@
+#- name: Configure /etc/environment
+#  lineinfile:
+#    dest: "/etc/environment"
+#    state: present
+#    regexp: "^{{ item.key }}="
+#    line: "{{ item.key }}={{ item.value}}"
+#    create: yes
+#  with_dict: "{{ env }}"
+#  tags:
+#    - kubeadm
+#  become: true

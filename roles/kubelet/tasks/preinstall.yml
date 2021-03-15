@@ -1,5 +1,11 @@
 ---
-- name: Remove swaps from /etc/fstab
+- name: Disable system swap
+  shell: "swapoff -a"
+  tags:
+    - kubelet
+  become: true
+
+- name: Unmount swap
   mount:
     name: "{{ item }}"
     fstype: swap
@@ -7,6 +13,9 @@
   with_items:
     - swap
     - none
+  tags:
+    - kubelet
+  become: true
 
 - name: Disable swap and allow bridged IPv4 traffic
   sysctl:
@@ -16,3 +25,7 @@
   with_items:
     - { name: 'vm.swappiness', value: '0' }
     - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+  tags:
+    - kubelet
+  become: true
+

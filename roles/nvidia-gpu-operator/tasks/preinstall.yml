@@ -1,0 +1,38 @@
+- when: ansible_os_family == "Debian" and ansible_pkg_mgr == "apt"
+  block:
+    - name: Uninstall existing Nvidia drivers
+      command: "apt-get remove '.*nvidia.*' -y" 
+#     apt-get module doesn't allow regular expressions for package names
+#     https://github.com/ansible/ansible-modules-core/issues/1258
+#      apt:
+#        name: "'.*nvidia.*'"
+#        state: absent
+#        autoremove: yes
+      become: yes
+
+    - name: Clean up unused packages
+      apt:
+        autoremove: yes
+      become: yes
+
+    - name: Load i2c_core and ipmi_msghandler modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - i2c_core
+        - ipmi_msghandler
+      become: yes
+
+    - when: ansible_distribution == "Ubuntu"
+      block:
+        - name: Disable nouveau driver
+          template:
+            src: blacklist-nouveau.j2
+            dest: /etc/modprobe.d/blacklist-nouveau.conf
+
+        - name: Update initramfs
+          command: "update-initramfs -u"
+      become: true
+  tags:
+    - nvidia-gpu-operator

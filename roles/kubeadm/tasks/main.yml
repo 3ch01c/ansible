@@ -1,5 +1,10 @@
 # kubeadm/tasks/main.yml
 ---
+- name: Perform kubeadm preinstall tasks
+  include_tasks: preinstall.yml
+  tags:
+    - kubeadm
+
 - name: Install kubeadm
   block:
     - when: ansible_os_family == "Debian" and ansible_pkg_mgr == "apt"
@@ -27,6 +32,7 @@
     - kubeadm
   become: true
 
-- include_tasks: init.yml
+- name: Perform Kubernetes cluster initialization tasks
+  include_tasks: init.yml
   tags:
     - kubeadm

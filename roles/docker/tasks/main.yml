@@ -26,45 +26,63 @@
             repo: deb [arch={{ arch }}] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
             state: present
 
-        - name: Install Docker 
+        - name: Install Docker packages
           apt: 
             name: "{{ packages }}"
             state: present
             update_cache: yes
+            force: yes
           vars:
             packages:
-              - docker-ce 
-              - docker-ce-cli 
+              - docker-ce=5:19.03.15~3-0~ubuntu-bionic
+              - docker-ce-cli=5:19.03.15~3-0~ubuntu-bionic
               - containerd.io
 
-        - name: Hold docker-ce version
+        - name: Hold Docker packages
           dpkg_selections:
-            name: docker-ce
+            name: "{{ item }}"
             selection: hold
-          become: true
-
-        - name: Hold docker-ce-cli version
-          dpkg_selections:
-            name: docker-ce-cli
-            selection: hold
-
-        - name: Hold containerd.io version
-          dpkg_selections:
-            name: containerd.io
-            selection: hold
+          loop:
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
   become: true
   tags:
     - docker
 
-- name: Start docker
-  when: ansible_service_mgr == "systemd"
-  systemd:
-    name: docker
-    daemon_reload: yes
-    state: started
-    enabled: yes
-  notify:
-    - docker status
+- when: ansible_service_mgr == "systemd"
+  block:
+    - name: Create service configuration
+      file:
+        path: /etc/systemd/system/docker.service.d
+        state: directory
+
+    - name: Configure proxy
+      when: env.http_proxy is defined
+      template:
+        src: http-proxy.j2
+        dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+
+    - name: Create /etc/docker
+      file:
+        path: /etc/docker
+        state: directory
+
+    - name: Configure daemon
+      template: 
+        src: daemon.j2
+        dest: /etc/docker/daemon.json
+
+    - name: Restart Docker service
+      systemd:
+        name: docker
+        daemon_reload: yes
+        state: restarted
+        enabled: yes
+      notify:
+        - docker status
+
   become: true
   tags:
     - docker
+

@@ -3,12 +3,16 @@
 - name: Reset Kubernetes cluster
   shell: "kubeadm reset --force"
   register: reset_cluster
+  tags:
+    - kubeadm
   become: true
 
 - name: Initialize Kubernetes cluster
   when: reset_cluster is succeeded
   command: "kubeadm init --pod-network-cidr {{ pod_network_cidr }} {{ kubeadm_opts }} {{ init_opts }}"
   register: init_cluster
+  tags:
+    - kubeadm
   become: true
 
 - name: Create Kubernetes config directory
@@ -16,6 +20,8 @@
     path: .kube/
     state: directory
     mode: 0700
+  tags:
+    - kubeadm
 
 - name: Copy Kubernetes config
   when: init_cluster is succeeded
@@ -23,12 +29,21 @@
     src: /etc/kubernetes/admin.conf
     dest: .kube/config
     mode: 0700
+    owner: "{{ ansible_real_user_id }}"
+    group: "{{ ansible_real_group_id }}"
     remote_src: true
+  tags:
+    - kubeadm
   become: true
 
 - name: Generate join command
   command: kubeadm token create --print-join-command
   register: join_command
+  tags:
+    - kubeadm
+  become: true
 
 - name: Copy join command to local file
-  local_action: copy content= dest=join.sh
+  local_action: copy content="{{ join_command.stdout }}" dest=join.sh
+  tags:
+    - kubeadm
