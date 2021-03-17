@@ -82,3 +82,13 @@ You can change the deployment environment. For example, you can create `inventor
 [defaults]
 inventory = inventories/development
 ```
+
+## Troubleshooting
+
+If you're having issues connecting to your control plane, it could be your firewall. Check if traffic on port 6443 is reaching it.
+
+```sh
+sudo tcpdump -i ens5 -v port 6443
+```
+
+It might also be an issue if you're behind a web proxy because Kubernetes also uses port 443 for communication.
