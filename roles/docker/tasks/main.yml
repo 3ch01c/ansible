@@ -52,12 +52,12 @@
 
 - when: ansible_service_mgr == "systemd"
   block:
-    - name: Create service configuration
+    - name: Create Docker service configuration
       file:
         path: /etc/systemd/system/docker.service.d
         state: directory
 
-    - name: Configure proxy
+    - name: Configure Docker proxy
       when: env.http_proxy is defined
       template:
         src: http-proxy.j2
@@ -68,7 +68,7 @@
         path: /etc/docker
         state: directory
 
-    - name: Configure daemon
+    - name: Configure Docker daemon
       template: 
         src: daemon.j2
         dest: /etc/docker/daemon.json

@@ -36,3 +36,8 @@
   include_tasks: init.yml
   tags:
     - kubeadm
+
+- name: Untaint manager for scheduling pods
+  command: "kubectl taint nodes --all node-role.kubernetes.io/master-"
+  tags:
+    - kubeadm
