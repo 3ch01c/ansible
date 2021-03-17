@@ -3,9 +3,11 @@ ansible_architecture: x86_64
 ansible_default_ipv4.interface: ens1
 ansible_distribution: Ubuntu
 ansible_distribution_release: focal
-ansible_host: 10.0.1.25
+ansible_host: localhost
 ansible_os_family: Debian
 ansible_python_interpreter: /usr/bin/python3
+ansible_real_group_id: 1000
+ansible_real_user_id: 1000
 ansible_service_mgr: systemd
 ansible_user: ubuntu
 apiserver_advertise_address: 10.0.1.25
@@ -14,3 +16,8 @@ env:
   http_proxy: ""
   https_proxy: ""
   no_proxy: ""
+kubeadm_opts: |
+  --pod-network-cidr 192.168.0.0/16
+  --apiserver-advertise-address 10.0.1.25
+  --apiserver-cert-extra-sans localhost
+  --control-plane-endpoint localhost

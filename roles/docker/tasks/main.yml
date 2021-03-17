@@ -34,8 +34,8 @@
             force: yes
           vars:
             packages:
-              - docker-ce=5:19.03.15~3-0~ubuntu-bionic
-              - docker-ce-cli=5:19.03.15~3-0~ubuntu-bionic
+              - docker-ce=5:19.03.15~3-0~ubuntu-{{ ansible_distribution_release }}
+              - docker-ce-cli=5:19.03.15~3-0~ubuntu-{{ ansible_distribution_release }}
               - containerd.io
 
         - name: Hold Docker packages
