@@ -10,7 +10,6 @@ ansible_real_group_id: 1000
 ansible_real_user_id: 1000
 ansible_service_mgr: systemd
 ansible_user: ubuntu
-apiserver_advertise_address: 10.0.1.25
 arch: amd64
 env:
   http_proxy: ""

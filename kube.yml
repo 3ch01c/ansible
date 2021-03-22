@@ -3,16 +3,15 @@
   gather_facts: true
   roles:
     - kubelet
+    - kubectl
     - kubeadm
     - calico
-    - kubectl
     - helm
   environment: "{{env}}"
 - hosts: workers
   gather_facts: true
   roles:
     - kubelet
-    - nvidia-gpu-operator
   environment: "{{env}}"
 - hosts: gpu_operators
   gather_facts: true

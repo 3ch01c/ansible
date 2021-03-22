@@ -1,10 +1,3 @@
 arch: amd64
-pod_network_cidr: 192.168.0.0/16
 kubeadm_opts: |
   --pod-network-cidr 192.168.0.0/16
-kube_addons:
-  helm: true
-  dashboard: true
-  healthcheck: false
-  metallb: false
-tmp_dir: /tmp/kubeadm-ansible/
